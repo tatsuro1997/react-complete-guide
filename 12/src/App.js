@@ -16,7 +16,7 @@ function App() {
     }
   }, [allowToggle]);
 
-  const allowTggleHandler = () => {
+  const allowToggleHandler = () => {
     setAllowToggle(true);
   };
 
@@ -24,7 +24,7 @@ function App() {
     <div className="app">
       <h1>Hi there!</h1>
       <DemoOutput show={showParagraph} />
-      <Button onClick={allowTggleHandler}>Allow Tggleing!</Button>
+      <Button onClick={allowToggleHandler}>Allow Tggleing!</Button>
       <Button onClick={toggleParagraphHandler}>Show Paragraph!</Button>
     </div>
   );
