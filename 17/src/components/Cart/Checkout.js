@@ -29,25 +29,31 @@ const Checkout = props => {
         const enteredNameIsValid = !isEmpty(enteredName);
         const enteredStreetIsValid = !isEmpty(enteredStreet);
         const enteredCityIsValid = !isEmpty(enteredCity);
-        const enteredPastalCodeIsValid = isFiveChars(enteredPostalCode);
+        const enteredPostalCodeIsValid = isFiveChars(enteredPostalCode);
 
         setFormInputsValidity({
             name: enteredNameIsValid,
             street: enteredStreetIsValid,
             city: enteredCityIsValid,
-            postalCode: enteredPastalCodeIsValid
+            postalCode: enteredPostalCodeIsValid
         })
 
         const formIsValid =
             enteredNameIsValid &&
             enteredStreetIsValid &&
             enteredCityIsValid &&
-            enteredPastalCodeIsValid;
+            enteredPostalCodeIsValid;
 
-        if (formIsValid) {
+        if (!formIsValid) {
             return;
         }
-            // submit the cart data
+
+        props.onConfirm({
+            name: enteredName,
+            street: enteredStreet,
+            city: enteredCity,
+            postalCode: enteredPostalCode,
+        });
     };
 
     const nameControlClasses = `${classes.control} ${formInputsValidity.name ? '' : classes.invalid}`;
@@ -79,7 +85,7 @@ const Checkout = props => {
             </div>
             <div className={classes.actions}>
                 <button type="button" onClick={props.onCancel}>Cancel</button>
-                <button>Confirm</button>
+                <button className={classes.submit}>Confirm</button>
             </div>
         </form>
     );
