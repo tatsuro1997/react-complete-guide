@@ -4,7 +4,7 @@ import { uiActions } from "./ui-slice";
 export const fetchCartData = () => {
     return async dispatch => {
         const fetchData = async () => {
-            const response = fetch(
+            const response = await fetch(
                 'https://react-http-e3621-default-rtdb.firebaseio.com/cart.json'
             );
 
@@ -19,8 +19,9 @@ export const fetchCartData = () => {
 
         try {
             const cartData = await fetchData();
-                dispatch(cartActions.replaceCart({
-                    itms: cartData.items || [],
+            dispatch(
+                cartActions.replaceCart({
+                    items: cartData.items || [],
                     totalQuantity: cartData.totalQuantity
                 })
             );
