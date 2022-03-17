@@ -18,7 +18,7 @@ const AllQuotes = () => {
 
     if (status === 'pending') {
         return (
-            <div className="centerd">
+            <div className="centered">
                 <LoadingSpinner />;
             </div>
         );
