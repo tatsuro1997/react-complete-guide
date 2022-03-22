@@ -25,7 +25,9 @@ function MeetupDetails(props) {
 };
 
 export async function getStaticPaths() {
-    const client = await MongoClient.connect(`mongodb+srv://${process.env.NEXT_PUBLIC_MONGODB_USER_NAME}:${process.env.NEXT_PUBLIC_MONGODB_USER_PASSWORD}@cluster0.bnhpu.mongodb.net/meetups?retryWrites=true&w=majority`);
+    const client = await MongoClient.connect(
+        `mongodb+srv://${process.env.NEXT_PUBLIC_MONGODB_USER_NAME}:${process.env.NEXT_PUBLIC_MONGODB_USER_PASSWORD}@cluster0.bnhpu.mongodb.net/meetups?retryWrites=true&w=majority`
+    );
     const db = client.db();
 
     const meetupsCollection = db.collection('meetups');
