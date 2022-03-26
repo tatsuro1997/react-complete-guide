@@ -19,58 +19,53 @@ const ingredientReducer = (currentIngredients, action) => {
   }
 };
 
-
-
 const Ingredients = () => {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-  const { isLoading, error, data, sendRequest } = useHttp();
+  const { isLoading, error, data, sendRequest, reqExtra, reqIdentifier } = useHttp();
 
   // const [userIngredients, setUserIngredients] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState()
 
   useEffect(() => {
-    console.log('RENDERING INGREDIENTS', userIngredients);
-  }, [userIngredients])
+    if (!isLoading && !error && reqIdentifier === 'REMOVE_INGREDIENT') {
+      dispatch({ type: 'DELETE', id: reqExtra })
+    } else if (!isLoading && !error && reqIdentifier === 'ADD_INGREDIENT') {
+      dispatch({
+        type: 'ADD',
+        ingredient: { id: data.name, ...reqExtra }
+      })
+    }
+  }, [data, reqExtra, reqIdentifier, isLoading, error]);
 
   const fillteredIngreadientsHandler = useCallback(fillteredIngredients => {
-    // setUserIngredients(fillteredIngredients);
     dispatch({ type: 'SET', ingredients: fillteredIngredients });
   }, []);
 
   const addIngredientHandler = useCallback((ingredient) => {
-    // dispatchHttp({ type: 'SEND' });
-    // fetch('https://react-http-e3621-default-rtdb.firebaseio.com/ingredients.json', {
-    //   method: 'POST',
-    //   body: JSON.stringify(ingredient),
-    //   headers: { 'Content-Type': 'application/json' }
-    // })
-    // .then(response => {
-    //   dispatchHttp({ type: 'RESPONSE' });
-    //   return response.json();
-    // })
-    // .then(responseData => {
-    //   // setUserIngredients(prevIngredients => [
-    //   //   ...prevIngredients,
-    //   //   { id: responseData.name, ...ingredient }
-    //   // ]);
-    //   dispatch({
-    //     type: 'ADD',
-    //     ingredient: { id: responseData.name, ...ingredient }
-    //   });
-    // });
-  }, []);
+    sendRequest(
+      'https://react-http-e3621-default-rtdb.firebaseio.com/ingredients.json',
+      'POST',
+      JSON.stringify(ingredient),
+      ingredient,
+      'ADD_INGREDIENT'
+    );
+  }, [sendRequest]);
 
-  const removeIngredientHandler = useCallback(ingredientId => {
+  const removeIngredientHandler = useCallback(
+    ingredientId => {
     sendRequest(
       `https://react-http-e3621-default-rtdb.firebaseio.com/ingredients/${ingredientId}.json`,
-      'DELETE'
+      'DELETE',
+      null,
+      ingredientId,
+      'REMOVE_INGREDIENT'
     );
   }, [sendRequest]);
 
   const clearError = useCallback(() => {
     // dispatchHttp({ type: 'CLEAR' });
-  }, [])
+  }, [sendRequest])
 
   const ingredientList = useMemo(() => {
     return (
