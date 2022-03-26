@@ -21,11 +21,7 @@ const ingredientReducer = (currentIngredients, action) => {
 
 const Ingredients = () => {
   const [userIngredients, dispatch] = useReducer(ingredientReducer, []);
-  const { isLoading, error, data, sendRequest, reqExtra, reqIdentifier } = useHttp();
-
-  // const [userIngredients, setUserIngredients] = useState([]);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState()
+  const { isLoading, error, data, sendRequest, reqExtra, reqIdentifier, clear } = useHttp();
 
   useEffect(() => {
     if (!isLoading && !error && reqIdentifier === 'REMOVE_INGREDIENT') {
@@ -63,10 +59,6 @@ const Ingredients = () => {
     );
   }, [sendRequest]);
 
-  const clearError = useCallback(() => {
-    // dispatchHttp({ type: 'CLEAR' });
-  }, [sendRequest])
-
   const ingredientList = useMemo(() => {
     return (
       <IngredidentList
@@ -78,7 +70,7 @@ const Ingredients = () => {
 
   return (
     <div className="App">
-      {error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
+      {error && <ErrorModal onClose={clear}>{error}</ErrorModal>}
 
       <IngredientForm
         onAddIngredient={addIngredientHandler}
